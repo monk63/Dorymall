@@ -13,11 +13,13 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     WebView webView;
+    private LinearLayout noInternetLayout;
 
 ProgressBar progressBar;
 
@@ -25,9 +27,12 @@ ProgressBar progressBar;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();// This line hides the action bar.
         setContentView(R.layout.activity_main);
+
+        noInternetLayout=findViewById(R.id.noInternetLayout);
 
         webView = (WebView) findViewById(R.id.webview);
         webView.setWebViewClient(new WebViewClient());
@@ -36,7 +41,12 @@ ProgressBar progressBar;
         progressBar.setMax(100);
         webView.setWebViewClient(new WebViewClient());
 
-        webView.loadUrl("https://dorynmall.com/");
+
+
+       // webView.loadUrl("https://dorynmall.com/");
+
+        checkInternet();
+
         progressBar.setProgress(0);
 
         webView.setWebChromeClient(new WebChromeClient(){
@@ -57,6 +67,26 @@ ProgressBar progressBar;
 
 
     }
+    private void checkInternet(){
+        ConnectivityManager connectivityManager= (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifi=connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobile=connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        if(wifi.isConnected()){
+            webView.loadUrl("https://dorynmall.com/");
+            webView.setVisibility(View.VISIBLE);
+            noInternetLayout.setVisibility(View.INVISIBLE);
+        }
+        else if(mobile.isConnected()){
+            webView.loadUrl("https://dorynmall.com/");
+            webView.setVisibility(View.VISIBLE);
+            noInternetLayout.setVisibility(View.INVISIBLE);
+        } else {
+            webView.setVisibility(View.INVISIBLE);
+            noInternetLayout.setVisibility(View.VISIBLE);
+        }
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -66,6 +96,8 @@ ProgressBar progressBar;
             super.onBackPressed();
         }
     }
+
+
 
 
 }
