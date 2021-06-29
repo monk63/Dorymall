@@ -47,6 +47,9 @@ ProgressBar progressBar;
 
         checkInternet();
 
+        //Displaying Toast with loading message
+       Toast.makeText(getApplicationContext(),"Chargement...",Toast.LENGTH_LONG).show();
+
         progressBar.setProgress(0);
 
         webView.setWebChromeClient(new WebChromeClient(){
@@ -56,6 +59,7 @@ ProgressBar progressBar;
                 progressBar.setProgress(newProgress);
                 if (newProgress == 100)
                     progressBar.setVisibility(View.INVISIBLE);
+
                 else
                     progressBar.setVisibility(View.VISIBLE);
                 super.onProgressChanged(view, newProgress);
@@ -67,6 +71,7 @@ ProgressBar progressBar;
 
 
     }
+
     private void checkInternet(){
         ConnectivityManager connectivityManager= (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifi=connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -84,6 +89,7 @@ ProgressBar progressBar;
         } else {
             webView.setVisibility(View.INVISIBLE);
             noInternetLayout.setVisibility(View.VISIBLE);
+
         }
 
     }
